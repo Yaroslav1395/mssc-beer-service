@@ -1,0 +1,18 @@
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 221
+
+{
+  "id" : null,
+  "version" : null,
+  "createdDate" : null,
+  "lastModifiedDate" : null,
+  "beerName" : "My Beer",
+  "beerStyle" : "ALE",
+  "upc" : "0631234200036",
+  "price" : 2.99,
+  "quantityOnHand" : null
+}
+----

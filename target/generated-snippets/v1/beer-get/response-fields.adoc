@@ -1,0 +1,40 @@
+|===
+|Path|Type|Description
+
+|`+id+`
+|`+Null+`
+|Идентификатор пива в виде UUID
+
+|`+version+`
+|`+Null+`
+|Номер версии пива
+
+|`+createdDate+`
+|`+Null+`
+|Дата создания пива
+
+|`+lastModifiedDate+`
+|`+Null+`
+|Дата изменения пива
+
+|`+beerName+`
+|`+String+`
+|Название пива
+
+|`+beerStyle+`
+|`+String+`
+|Стиль пива
+
+|`+upc+`
+|`+String+`
+|Уникальный код пива
+
+|`+price+`
+|`+Number+`
+|Цена пива
+
+|`+quantityOnHand+`
+|`+Null+`
+|Количество на складе
+
+|===

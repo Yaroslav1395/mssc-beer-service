@@ -1,0 +1,51 @@
+= SFG BEER SERVICE DOCS
+Сахно Ярослав;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+
+Микросервис написанный в целях практики по курсу микросервисной архитектуры.
+Пока не ясно за что отвечает данный микросервис.
+
+
+== Работа с объектом "Пиво"
+
+`BeerOrderControllerTest` класс необходим для тестирования `BeerController`. На основе
+данного класса создается документация. В классе тестируются CRUD операции над сущностью
+`BeerEntity`.
+
+=== Получение пива
+
+.CURL запрос
+include::{snippets}/v1/beer-get/curl-request.adoc[]
+
+.HTTP запрос
+include::{snippets}/v1/beer-get/http-request.adoc[]
+
+.Параметр пути HTTP запроса
+include::{snippets}/v1/beer-get/path-parameters.adoc[]
+
+.HTTP ответ
+include::{snippets}/v1/beer-get/http-response.adoc[]
+
+.Свойства ответа
+include::{snippets}/v1/beer-get/response-fields.adoc[]
+
+=== Создание нового пива
+
+.CURL запрос
+include::{snippets}/v1/beer-post/curl-request.adoc[]
+
+.HTTP запрос
+include::{snippets}/v1/beer-post/http-request.adoc[]
+
+.Свойства запроса
+include::{snippets}/v1/beer-post/request-fields.adoc[]
+
+.HTTP ответ
+include::{snippets}/v1/beer-post/http-response.adoc[]
+
+.Заголовки HTTP ответа
+include::{snippets}/v1/beer-post/response-headers.adoc[]
+
