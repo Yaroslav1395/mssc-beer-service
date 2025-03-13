@@ -60,6 +60,12 @@
             <artifactId>liquibase-core</artifactId>
         </dependency>
 
+        <!--Зависимости для ActiveMQ-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-artemis</artifactId>
+        </dependency>
+
         <!--Зависимости для преобразования Java-объектов в XML и обратно-->
         <dependency>
             <groupId>javax.xml.bind</groupId>
