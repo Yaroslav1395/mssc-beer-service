@@ -10,6 +10,7 @@ import org.springframework.jms.support.converter.MessageType;
 public class JmsConfig {
 
     public static final String BREWING_REQUEST_QUEUE = "BREWING_REQUEST_QUEUE";
+    public static final String NEW_INVENTORY_QUEUE = "NEW_INVENTORY_QUEUE";
 
     /**
      * Данный метод создает бин, который будет использоваться как конвертер сообщений при работе с JMS.
