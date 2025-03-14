@@ -12,6 +12,8 @@ public class JmsConfig {
 
     public static final String BREWING_REQUEST_QUEUE = "BREWING_REQUEST_QUEUE";
     public static final String NEW_INVENTORY_QUEUE = "NEW_INVENTORY_QUEUE";
+    public static final String VALIDATE_ORDER_QUEUE = "VALIDATE_ORDER_QUEUE";
+    public static final String VALIDATE_ORDER_RESPONSE_QUEUE = "VALIDATE_ORDER_RESPONSE_QUEUE";
 
     /**
      * Данный метод создает бин, который будет использоваться как конвертер сообщений при работе с JMS.
