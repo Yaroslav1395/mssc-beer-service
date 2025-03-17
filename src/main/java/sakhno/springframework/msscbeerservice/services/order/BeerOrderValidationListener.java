@@ -14,6 +14,11 @@ public class BeerOrderValidationListener {
     private final BeerOrderValidator beerOrderValidator;
     private final JmsTemplate jmsTemplate;
 
+    /**
+     * Метод прослушивает очередь на валидацию заказа пив. При валидации проверяется есть ли такое пиво или нет.
+     * После валидации отправляется результат в очередь
+     * @param validateOrderRequest - запрос на валидацию
+     */
     @JmsListener(destination = JmsConfig.VALIDATE_ORDER_QUEUE)
     public void listenValidation(ValidateOrderRequest validateOrderRequest) {
         Boolean isValid = beerOrderValidator.validateOrder(validateOrderRequest.getBeerOrderDto());
