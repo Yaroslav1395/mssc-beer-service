@@ -18,7 +18,7 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class BeerInventoryServiceImpl implements BeerInventoryService {
-    private final String INVENTORY_PATH = "/api/v1/beer/{beerId}/inventory";
+    private final String INVENTORY_PATH = "/api/v1/inventory/beer/{beerId}";
     private final RestTemplate restTemplate;
     @Value("${sfg.beer.inventory.service.host}")
     private String beerInventoryServiceHost;

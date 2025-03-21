@@ -5,8 +5,8 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 import sakhno.springframework.msscbeerservice.config.JmsConfig;
-import sakhno.springframework.msscbeerservice.web.model.beer.order.events.ValidateOrderRequest;
-import sakhno.springframework.msscbeerservice.web.model.beer.order.events.ValidateOrderResult;
+import sakhno.springframework.msscbeerservice.web.model.events.ValidateOrderRequest;
+import sakhno.springframework.msscbeerservice.web.model.events.ValidateOrderResult;
 
 @Component
 @RequiredArgsConstructor

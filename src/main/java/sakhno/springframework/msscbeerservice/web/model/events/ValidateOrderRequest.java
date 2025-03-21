@@ -1,5 +1,6 @@
-package sakhno.springframework.msscbeerservice.web.model.beer.order.events;
+package sakhno.springframework.msscbeerservice.web.model.events;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
