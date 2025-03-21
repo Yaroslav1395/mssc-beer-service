@@ -5,8 +5,8 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 import sakhno.springframework.msscbeerservice.config.JmsConfig;
-import sakhno.springframework.msscbeerservice.web.model.beer.order.events.ValidateOrderRequest;
-import sakhno.springframework.msscbeerservice.web.model.beer.order.events.ValidateOrderResult;
+import sakhno.springframework.msscbeerservice.web.model.events.ValidateOrderRequest;
+import sakhno.springframework.msscbeerservice.web.model.events.ValidateOrderResult;
 
 @Component
 @RequiredArgsConstructor
@@ -14,6 +14,11 @@ public class BeerOrderValidationListener {
     private final BeerOrderValidator beerOrderValidator;
     private final JmsTemplate jmsTemplate;
 
+    /**
+     * Метод прослушивает очередь на валидацию заказа пив. При валидации проверяется есть ли такое пиво или нет.
+     * После валидации отправляется результат в очередь
+     * @param validateOrderRequest - запрос на валидацию
+     */
     @JmsListener(destination = JmsConfig.VALIDATE_ORDER_QUEUE)
     public void listenValidation(ValidateOrderRequest validateOrderRequest) {
         Boolean isValid = beerOrderValidator.validateOrder(validateOrderRequest.getBeerOrderDto());

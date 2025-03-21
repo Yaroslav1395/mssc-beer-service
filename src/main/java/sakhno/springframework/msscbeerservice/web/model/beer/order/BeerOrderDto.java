@@ -1,5 +1,6 @@
 package sakhno.springframework.msscbeerservice.web.model.beer.order;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class BeerOrderDto extends BaseItemDto {
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private UUID customerId;
     private String customerRef;
     private List<BeerOrderLineDto> beerOrderLines;

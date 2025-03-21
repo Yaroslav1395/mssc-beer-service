@@ -14,6 +14,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class BeerOrderValidator {
     private final BeerRepository beerRepository;
 
+    /**
+     * Метод позволяет проверить заказ на пиво. Если в заказе есть пиво, которого нет в базе данных - то возвращает false
+     * @param beerOrderDto - заказ на пиво
+     * @return - признак успешной валидации
+     */
     public Boolean validateOrder(BeerOrderDto beerOrderDto) {
         AtomicInteger beerNotFound = new AtomicInteger();
 
