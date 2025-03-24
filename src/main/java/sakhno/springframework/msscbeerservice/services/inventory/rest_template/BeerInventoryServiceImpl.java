@@ -1,4 +1,4 @@
-package sakhno.springframework.msscbeerservice.services.inventory;
+package sakhno.springframework.msscbeerservice.services.inventory.rest_template;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import sakhno.springframework.msscbeerservice.services.inventory.BeerInventoryService;
 import sakhno.springframework.msscbeerservice.web.model.inventory.BeerInventoryDto;
 
 import java.util.List;
