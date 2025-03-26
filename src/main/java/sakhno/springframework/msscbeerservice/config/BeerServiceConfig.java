@@ -21,6 +21,10 @@ public class BeerServiceConfig {
         return new RestTemplate();
     }
 
+    /**
+     *
+     * @return
+     */
     @Bean
     public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
