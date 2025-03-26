@@ -17,7 +17,7 @@ import java.util.UUID;
 public interface InventoryServiceFeignClient {
 
     @RequestMapping(method = RequestMethod.GET, value = BeerInventoryServiceImpl.INVENTORY_PATH)
-    @CircuitBreaker(name="MSSC-BEER-INVENTORY-SERVICE-BREAKER")
-    @Retry(name="MSSC-BEER-INVENTORY-SERVICE-RETRY")
+    //@CircuitBreaker(name="MSSC-BEER-INVENTORY-SERVICE-BREAKER")
+    //@Retry(name="MSSC-BEER-INVENTORY-SERVICE-RETRY")
     ResponseEntity<List<BeerInventoryDto>> getOnHandInventory(@PathVariable UUID beerId);
 }
