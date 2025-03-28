@@ -13,9 +13,18 @@ import sakhno.springframework.msscbeerservice.web.model.inventory.BeerInventoryD
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Данный класс создает под капотом HttpClient и отправляет запросы на сервис MSSC-BEER-INVENTORY-SERVICE.
+ * В случае если сервис не доступен, запускается альтернативный сценарий BeerInventoryServiceFailFeignClientImpl.
+ */
+//TODO: настроить BREAKER на реализацию альтернативного сценария fallback через FeignClient
 @FeignClient(name = "MSSC-BEER-INVENTORY-SERVICE", fallback = BeerInventoryServiceFailFeignClientImpl.class)
 public interface InventoryServiceFeignClient {
 
+    /**
+     * Метод отправляет запрос на сервис склада для получения остатков пива по идентификатору.
+     * @return - список пива на складе
+     */
     @RequestMapping(method = RequestMethod.GET, value = BeerInventoryServiceImpl.INVENTORY_PATH)
     //@CircuitBreaker(name="MSSC-BEER-INVENTORY-SERVICE-BREAKER")
     //@Retry(name="MSSC-BEER-INVENTORY-SERVICE-RETRY")

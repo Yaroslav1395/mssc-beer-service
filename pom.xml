@@ -33,17 +33,19 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-            <version>${actuator.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>${actuator.version}</version>
+        </dependency>
+
+        <!--Зависимости для отправки запросов на api-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
@@ -52,6 +54,8 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
         </dependency>
+
+        <!--Зависимости для работы с конфигурационным сервером-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-config</artifactId>
@@ -60,6 +64,8 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
+
+        <!--Зависимости для трассировки и логирования-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-zipkin</artifactId>
@@ -141,6 +147,19 @@
             <version>${org.mapstruct.version}</version>
         </dependency>
 
+        <!--Зависимости для документации-->
+        <dependency>
+            <groupId>org.springframework.restdocs</groupId>
+            <artifactId>spring-restdocs-mockmvc</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!--Зависимости для кэширования-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+
 
         <!--Зависимости для тестирования-->
         <dependency>
@@ -168,19 +187,6 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
             <scope>test</scope>
-        </dependency>
-
-        <!--Зависимости для документации-->
-        <dependency>
-            <groupId>org.springframework.restdocs</groupId>
-            <artifactId>spring-restdocs-mockmvc</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!--Зависимости для тестирования-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
     </dependencies>
 

@@ -8,6 +8,10 @@ import sakhno.springframework.msscbeerservice.web.model.inventory.BeerInventoryD
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Данный класс реализует альтернативный сценарий отправки запроса на получение остатков пива на складе.
+ * Отрабатывает в случае если склад недоступен
+ */
 @Component
 @RequiredArgsConstructor
 public class BeerInventoryServiceFailFeignClientImpl implements InventoryServiceFeignClient {

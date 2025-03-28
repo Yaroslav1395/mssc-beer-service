@@ -22,8 +22,9 @@ public class BeerServiceConfig {
     }
 
     /**
-     *
-     * @return
+     * Этот метод создает и настраивает ObjectMapper, который используется для сериализации и десериализации
+     * JSON в Java-объект.
+     * @return -
      */
     @Bean
     public ObjectMapper objectMapper() {

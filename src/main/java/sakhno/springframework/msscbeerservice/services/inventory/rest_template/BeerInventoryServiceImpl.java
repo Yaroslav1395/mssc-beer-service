@@ -14,6 +14,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Данный сервис позволяет получить остаток пива на складе. Он реализован на основе RestTemplate.
+ */
+//TODO: удалить класс
+@Deprecated
 //@Service
 @Slf4j
 @RequiredArgsConstructor

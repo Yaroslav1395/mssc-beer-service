@@ -2,7 +2,6 @@ package sakhno.springframework.msscbeerservice.services.inventory;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sakhno.springframework.msscbeerservice.services.inventory.feign.InventoryServiceFeignClient;
@@ -18,6 +17,11 @@ import java.util.UUID;
 public class BeerInventoryServiceFeign implements BeerInventoryService {
     private final InventoryServiceFeignClient inventoryServiceFeignClient;
 
+    /**
+     * Метод позволяет получить количество пива на складе
+     * @param beerId - идентификатор пива
+     * @return - количество
+     */
     @Override
     public Integer getOnHandInventory(UUID beerId) {
         log.info("Вызов сервиса Inventory для получения остатка для пива с ID: {}", beerId);
