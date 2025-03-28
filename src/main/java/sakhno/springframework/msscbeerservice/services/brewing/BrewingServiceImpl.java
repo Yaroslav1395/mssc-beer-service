@@ -27,7 +27,7 @@ public class BrewingServiceImpl implements BrewingService {
      * Метод сопоставляет минимальное количество пива с фактическим количеством на складе. В случае если на складе
      * меньше, то в очередь отправляется событие на заказ варки пива
      */
-    @Scheduled(fixedRate = 5000)
+    //@Scheduled(fixedRate = 5000)
     public void checkForLovInventory() {
         List<BeerEntity> beerEntities = beerRepository.findAll();
         beerEntities.forEach(beerEntity -> {
