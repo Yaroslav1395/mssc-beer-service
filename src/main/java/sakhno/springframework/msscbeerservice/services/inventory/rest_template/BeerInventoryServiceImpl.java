@@ -1,11 +1,13 @@
 package sakhno.springframework.msscbeerservice.services.inventory.rest_template;
 
-import lombok.RequiredArgsConstructor;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import sakhno.springframework.msscbeerservice.services.inventory.BeerInventoryService;
 import sakhno.springframework.msscbeerservice.web.model.inventory.BeerInventoryDto;
@@ -21,13 +23,19 @@ import java.util.UUID;
 @Deprecated
 //@Service
 @Slf4j
-@RequiredArgsConstructor
 public class BeerInventoryServiceImpl implements BeerInventoryService {
     public static final String INVENTORY_PATH = "/api/v1/inventory/beer/{beerId}";
     private final RestTemplate restTemplate;
     @Value("${sfg.beer.inventory.service.host}")
     private String beerInventoryServiceHost;
 
+    public BeerInventoryServiceImpl(RestTemplateBuilder restTemplateBuilder,
+                                    @Value("${beer.inventory.username}") String inventoryUser,
+                                    @Value("${beer.inventory.password}") String inventoryPassword) {
+        this.restTemplate = restTemplateBuilder
+                .basicAuthentication(inventoryUser, inventoryPassword)
+                .build();
+    }
 
     /**
      * Метод позволяет получить количество пива на складе
