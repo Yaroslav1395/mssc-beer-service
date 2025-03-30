@@ -28,6 +28,8 @@
         <actuator.version>3.4.2</actuator.version>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <docker.image.prefix>mssc-beer</docker.image.prefix>
+        <docker.image.name>${project.artifactId}</docker.image.name>
     </properties>
 
     <dependencies>
@@ -204,6 +206,13 @@
 
     <build>
         <plugins>
+            <!--
+                Этот плагин отвечает за компиляцию Java-кода в проекте с использованием Maven.
+                AnnotationProcessorPaths указывает, какие процессоры аннотаций нужно использовать при компиляции.
+                Mapstruct-processor отвечает за генерацию кода мапперов (автоматическое преобразование DTO <-> Entity).
+                Lombok используется для автоматического создания геттеров, сеттеров, конструкторов и других методов.
+                Lombok-mapstruct-binding помогает MapStruct правильно работать с Lombok, чтобы избежать конфликтов при генерации кода.
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -233,6 +242,12 @@
                     </compilerArgs>
                 </configuration>
             </plugin>
+            <!--
+                Этот плагин предназначен для сборки, упаковки и запуска Spring Boot приложений с использованием Maven.
+                Определяет главный класс, который будет использоваться при запуске приложения.
+                Исключает Lombok из финального JAR-файла.
+                Layers> используется в Spring Boot для разделения JAR-файла на слои при упаковке Docker-образа.
+            -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -244,8 +259,19 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <layers>
+                        <includeLayerTools>true</includeLayerTools>
+                    </layers>
                 </configuration>
             </plugin>
+            <!--
+                Этот плагин используется для генерации документации в формате HTML на основе Asciidoc.
+                Prepare-package - Документация генерируется перед упаковкой проекта в JAR.
+                Process-asciidoc - Запускает обработку файлов Asciidoc (.adoc) и превращает их в HTML.
+                backend → html - Документ будет сгенерирован в формате HTML.
+                doctype → book - Используется стиль "книга" (подходит для больших руководств).
+                Spring REST Docs → Позволяет автоматически документировать API на основе тестов.
+            -->
             <plugin>
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
@@ -271,6 +297,12 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            <!--
+                Этот плагин используется для копирования файлов (ресурсов) в нужную директорию при сборке проекта.
+                Копирует сгенерированную документацию (например, из Asciidoctor) в папку static/docs.
+                Позволяет, например, раздавать документацию через Spring Boot (из папки static/).
+                Автоматизирует процесс, исключая необходимость копировать файлы вручную.
+            -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>${maven.resources.plugin}</version>
@@ -295,6 +327,38 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <!--
+                Этот плагин от Fabric8 используется для сборки, упаковки и загрузки Docker-образов прямо из Maven.
+                dockerHost - Определяет, как плагин взаимодействует с Docker (локально или по сети).
+                Verbose=true - Включает подробный вывод лога.
+                Name - Определяет имя Docker-образа (например, myregistry/myapp).
+                Alias - Псевдоним образа, используется в плагине.
+                DockerFileDir - Указывает, что образ собирается из Dockerfile.
+                Tags - Присваивает образу теги (latest, версия проекта).
+            -->
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.45.0</version>
+                <configuration>
+                    <!--<dockerHost>http://127.0.0.1:2375</dockerHost>
+                    <dockerHost>unix://var/run/docker.sock</dockerHost>-->
+                    <verbose>true</verbose>
+                    <images>
+                        <image>
+                            <name>${docker.image.prefix}/${docker.image.name}</name>
+                            <alias>${project.artifactId}</alias>
+                            <build>
+                                <dockerFileDir>${project.basedir}</dockerFileDir>
+                                <tags>
+                                    <tag>latest</tag>
+                                    <tag>${project.version}</tag>
+                                </tags>
+                            </build>
+                        </image>
+                    </images>
+                </configuration>
             </plugin>
         </plugins>
     </build>
