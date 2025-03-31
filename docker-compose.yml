@@ -20,3 +20,18 @@ services:
       - "8888:8888"
     depends_on:
       - eureka
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka
+  inventory-service:
+     image: mssc-beer-inventory/mssc-beer-inventory-service
+     ports:
+       - "8082:8082"
+     depends_on:
+       - eureka
+       - config-server
+       - jms
+     environment:
+       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka
+       SPRING_PROFILES_ACTIVE: test
+       SPRING_ZIPKIN_BASEURL: http://zipkin
+       SPRING_ARTEMIS_HOST: jms
