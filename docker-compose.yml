@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  jms:
+    image: vromero/activemq-artemis
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+  eureka:
+    image: mssc-beer-eureka/mssc-brewery-eureka
+    ports:
+      - "8761:8761"
+  config-server:
+    image: mssc-beer-config-server/mssc-config-server
+    ports:
+      - "8888:8888"
+    depends_on:
+      - eureka
