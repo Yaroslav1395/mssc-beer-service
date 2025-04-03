@@ -17,7 +17,7 @@ services:
   config-server:
     image: mssc-beer-config-server/mssc-config-server
     ports:
-      - "8888:8888"
+      - "8888:8889"
     depends_on:
       - eureka
     environment:
@@ -30,8 +30,10 @@ services:
        - eureka
        - config-server
        - jms
+     restart: always
      environment:
        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka
        SPRING_PROFILES_ACTIVE: test
+       MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
        SPRING_ZIPKIN_BASEURL: http://zipkin
-       SPRING_ARTEMIS_HOST: jms
+       SPRING_ARTEMIS_BROKER_URL: tcp://jms:61616
