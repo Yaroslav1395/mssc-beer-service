@@ -22,6 +22,7 @@ services:
       - eureka
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: true
   inventory-service:
      image: mssc-beer-inventory/mssc-beer-inventory-service
      ports:
@@ -32,8 +33,67 @@ services:
        - jms
      restart: always
      environment:
-       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka
        SPRING_PROFILES_ACTIVE: test
+       EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://netflix:eureka@eureka:8761/eureka
+       EUREKA_INSTANCE_PREFER_IP_ADDRESS: true
        MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
        SPRING_ZIPKIN_BASEURL: http://zipkin
        SPRING_ARTEMIS_BROKER_URL: tcp://jms:61616
+  inventory-failover-service:
+    image: mssc-beer-inventory-failover/mssc-inventory-failover
+    ports:
+      - "8083:8083"
+    depends_on:
+      - eureka
+    environment:
+      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://netflix:eureka@eureka:8761/eureka
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: true
+  beer-service:
+    image: mssc-beer/mssc-beer-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka
+      - config-server
+      - jms
+      - inventory-service
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: test
+      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://netflix:eureka@eureka:8761/eureka
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: true
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+      SPRING_ZIPKIN_BASEURL: http://zipkin
+      SPRING_ARTEMIS_BROKER_URL: tcp://jms:61616
+  order-service:
+    image: mssc-beer-order/mssc-beer-order-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka
+      - config-server
+      - jms
+      - beer-service
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: test
+      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://netflix:eureka@eureka:8761/eureka
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: true
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+      SPRING_ZIPKIN_BASEURL: http://zipkin
+      SPRING_ARTEMIS_BROKER_URL: tcp://jms:61616
+  gateway:
+    image: mssc-brewery-gateway/mssc-brewery-gateway
+    ports:
+      - "9090:9090"
+    depends_on:
+      - eureka
+      - config-server
+      - inventory-service
+      - beer-service
+      - order-service
+      - inventory-failover-service
+    environment:
+      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://netflix:eureka@eureka:8761/eureka
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: true
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
