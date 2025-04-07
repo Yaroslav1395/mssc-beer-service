@@ -15,13 +15,14 @@ services:
     depends_on:
       - elasticsearch
   filebeat:
-    image: docker.elastic.co/kibana/kibana:7.7.0
+    image: docker.elastic.co/beats/filebeat:7.7.0
     volumes:
-      - ./filebeat/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     user: root
     restart: always
+    command: filebeat -e -strict.perms=false
   jms:
     image: vromero/activemq-artemis
     ports:
