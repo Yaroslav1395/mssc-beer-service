@@ -1,0 +1,132 @@
+version: '3.8'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.0
+    ports:
+      - "9200:9200"
+    environment:
+      discovery.type: single-node
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.7.0
+    ports:
+      - "5601:5601"
+    restart: always
+    depends_on:
+      - elasticsearch
+  filebeat:
+    image: docker.elastic.co/kibana/kibana:7.7.0
+    volumes:
+      - ./filebeat/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    user: root
+    restart: always
+  jms:
+    image: vromero/activemq-artemis
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+  eureka:
+    image: mssc-beer-eureka/mssc-brewery-eureka
+    ports:
+      - "8761:8761"
+  config-server:
+    image: mssc-beer-config-server/mssc-config-server
+    ports:
+      - "8888:8889"
+    depends_on:
+      - eureka
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: true
+  inventory-service:
+    image: mssc-beer-inventory/mssc-beer-inventory-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eureka
+      - config-server
+      - jms
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: test
+      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://netflix:eureka@eureka:8761/eureka
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: true
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+      SPRING_ZIPKIN_BASEURL: http://zipkin
+      SPRING_ARTEMIS_BROKER_URL: tcp://jms:61616
+    labels:
+      collect_logs_with_filebeat: "true"
+      decode_log_event_to_json_object: "true"
+  inventory-failover-service:
+    image: mssc-beer-inventory-failover/mssc-inventory-failover
+    ports:
+      - "8083:8083"
+    depends_on:
+      - eureka
+    environment:
+      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://netflix:eureka@eureka:8761/eureka
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: true
+  beer-service:
+    image: mssc-beer/mssc-beer-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka
+      - config-server
+      - jms
+      - inventory-service
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: test
+      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://netflix:eureka@eureka:8761/eureka
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: true
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+      SPRING_ZIPKIN_BASEURL: http://zipkin
+      SPRING_ARTEMIS_BROKER_URL: tcp://jms:61616
+    labels:
+      collect_logs_with_filebeat: "true"
+      decode_log_event_to_json_object: "true"
+  order-service:
+    image: mssc-beer-order/mssc-beer-order-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka
+      - config-server
+      - jms
+      - beer-service
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: test
+      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://netflix:eureka@eureka:8761/eureka
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: true
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+      SPRING_ZIPKIN_BASEURL: http://zipkin
+      SPRING_ARTEMIS_BROKER_URL: tcp://jms:61616
+    labels:
+      collect_logs_with_filebeat: "true"
+      decode_log_event_to_json_object: "true"
+  gateway:
+    image: mssc-brewery-gateway/mssc-brewery-gateway
+    ports:
+      - "9090:9090"
+    depends_on:
+      - eureka
+      - config-server
+      - inventory-service
+      - beer-service
+      - order-service
+      - inventory-failover-service
+    environment:
+      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://netflix:eureka@eureka:8761/eureka
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: true
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+    labels:
+      collect_logs_with_filebeat: "true"
+      decode_log_event_to_json_object: "true"
